@@ -4,18 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="matkaklubi.css">
+    <link rel="stylesheet" href="/matkaklubi.css">
 </head>
 <body>
 
-    <h1><%= matk.nimetus %></h1>
+    <h1><%= matk.nimetus + ' -- ' + id  %></h1>
 
     <img class="matkapilt" src="<%=matk.pildiUrl %>" />
     
     <p><%=matk.kirjeldus %></p>
     <p>Osalejaid: <%=matk.osalejad.length %> </p>                        
 
-    <a href="###">Registreeru</a>
+    <h3>Oled huvitatud? Registreeru matkale</h3>
+   <form  class="registreerumine" action="/registreerumine" method="post">
+    <div class="vali">
+        <label for="nimi">Nimi</label>
+        <input type="text" name="nimi" placeholder="nimi">
+    </div>
+    <div class="vali">
+        <label for="Email">Email</label>
+        <input type="text" name="email" placeholder="email">
+    </div>
+    <input type="hidden" name="matkaIndex" value="<%= id %>">
+    <input type="submit" value="Registreeru">
+   </form>
+   
+   <div class="jalus">
+
+   </div> 
     
 </body>
 </html>

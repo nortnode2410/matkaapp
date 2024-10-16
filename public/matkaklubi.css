@@ -148,7 +148,15 @@ body {
     width: 60%;
 }
 
+.registreerumine {
+    padding-bottom: 3rem;
+    margin-top: 2rem;
+    margin-left: 3rem;
+}
 
+.registreerumine input {
+    margin-top: 1rem;;
+}
 
 @media screen and (min-width: 992px) {
     .pealkiri-kastid {
