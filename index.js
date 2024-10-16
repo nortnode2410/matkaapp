@@ -9,7 +9,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 
-const PORT = 3030
+const PORT = process.env.PORT || 3030
 
 const matk1 = {
     nimetus: "Sügismatk Kõrvemaal",
