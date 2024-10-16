@@ -2,8 +2,10 @@ const express = require('express')
 const ejs = require('ejs')
 const path = require("path")
 
+const {lisaMatk} = require("./model")
+
 const app = express()
-app.use(express.urlencoded())
+app.use(express.urlencoded({extended: true}))
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -83,6 +85,14 @@ app.post('/registreerumine', (req, res) => {
     //renderda mall sõnumi kättesaamise kohta
 
     console.log(s6numid)
+ })
+
+ app.get('/api/lisaMatk', (req, res )=>{
+    const uusMatk = {
+        nimetus : req.query.nimetus
+    }
+    lisaMatk(uusMatk);
+    res.end("Lisatud")
  })
 
 app.listen(PORT)
