@@ -19,11 +19,33 @@ async function lisaMatk(uusMatk) {
      
 }
 
-async function lisaRegistreerumine(uusRegistreerumine) {
+async function loeMatkad() {
+    try {
+        await client.connect();
+        const database = client.db(andmebaas);
+        const matkad = database.collection("matkad");
+        const result = await matkad.find({}).toArray()
+        return result
+    } finally {
+        await client.close();
+    }
+     
+}
 
+async function lisaRegistreerumine(uusRegistreerumine) {
+    try {
+        await client.connect();
+        const database = client.db(andmebaas);
+        const matkad = database.collection("registreerumised");
+        const result = await matkad.insertOne(uusRegistreerumine)
+        console.log(`A document was inserted with the _id: ${result.insertedId}`)
+    } finally {
+        await client.close();
+    }
 }
 
 module.exports = {
     lisaMatk,
-    lisaRegistreerumine
+    lisaRegistreerumine,
+    loeMatkad
 }
