@@ -3,7 +3,8 @@ const { MongoClient } = require("mongodb")
 const andmebaas = "matkaapp2410"
 const salasona = process.env.MONGO_PWD
 
-const mongoUrl = `mongodb+srv://matkaapp2410:${salasona}@cluster0.fnenu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+//const mongoUrl = `mongodb+srv://matkaapp2410:${salasona}@cluster0.fnenu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const mongoUrl = 'mongodb+srv://matkaapp2410:DcGgkbeC3hHkjLoh@cluster0.fnenu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 const client = new MongoClient(mongoUrl);
 
 async function lisaMatk(uusMatk) {

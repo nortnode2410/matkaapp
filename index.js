@@ -105,6 +105,9 @@ app.post('/registreerumine', (req, res) => {
     res.end()
  })
 
+
+ app.get('/admin', (req, res) => { res.render("admin") } )
+
  //Meetodid andmeoperatsioonide jaoks
  // read loe
  // post lisa
