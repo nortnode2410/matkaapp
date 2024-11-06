@@ -20,6 +20,22 @@ async function lisaMatk(uusMatk) {
      
 }
 
+async function muudaMatk(matk) {
+    try {
+        await client.connect();
+        const database = client.db(andmebaas);
+        const matkad = database.collection("matkad");
+        const result = await matkad.updateOne(
+            {_id: matk._id},
+            [
+                {$set: {osalejad: matk.osalejad}}
+            ]
+        )
+    } finally {
+        await client.close();
+    }
+}
+
 async function loeMatkad() {
     try {
         await client.connect();
@@ -48,5 +64,6 @@ async function lisaRegistreerumine(uusRegistreerumine) {
 module.exports = {
     lisaMatk,
     lisaRegistreerumine,
-    loeMatkad
+    loeMatkad,
+    muudaMatk
 }

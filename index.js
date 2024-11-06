@@ -2,7 +2,7 @@ const express = require('express')
 const ejs = require('ejs')
 const path = require("path")
 
-const {lisaMatk, lisaRegistreerumine, loeMatkad} = require("./model")
+const {lisaMatk, lisaRegistreerumine, loeMatkad, muudaMatk} = require("./model")
 
 const app = express()
 app.use(express.urlencoded({extended: true}))
@@ -13,31 +13,7 @@ app.set("view engine", "ejs");
 
 const PORT = process.env.PORT || 3030
 
-const matk1 = {
-    nimetus: "Sügismatk Kõrvemaal",
-    pildiUrl: "/assets/maed.png",
-    kirjeldus: "Lähme ja oleme kolm päeva looduses",
-    osalejad: []
-}
-
-const matk2 = {
-    nimetus: "Süstamatk Hiiumaal",
-    pildiUrl: "/assets/maed.png",
-    kirjeldus: "Lähme ja oleme kolm päeva vee peal",
-    osalejad: []
-}
-
-const matkad = [
-    matk1,
-    matk2,
-    {
-        nimetus: "Mägimatk Otepääl",
-        pildiUrl: "/assets/maed.png",
-        kirjeldus: "Lähme ja oleme kolm päeva mägedes",
-        osalejad: []
-    }
-]
-
+let matkad = []
 const s6nunid = []
 
 function registreeruMatkale(matkaIndex, nimi, email) {
@@ -53,13 +29,17 @@ function registreeruMatkale(matkaIndex, nimi, email) {
     }
     matk.osalejad.push(uusMatkaja)
     console.log(matkad)
+    muudaMatk(matk)
 }
 
 
 app.get('/test', (req, res) => {res.end('kõik töötab!')})
 app.use('/', express.static("public"))
 
-app.get('/', (req, res)=> { res.render("esileht", {matkad: matkad}) })
+app.get('/', async (req, res)=> {
+     matkad = await loeMatkad()
+     res.render("esileht", {matkad: matkad}) 
+    })
 app.get('/matk/:matkId', (req, res) => {
     const matkaIndex = req.params.matkId
     res.render("matk", { matk: matkad[matkaIndex], id: matkaIndex }) 
@@ -117,7 +97,7 @@ app.post('/registreerumine', (req, res) => {
  
  //api endpoint matkade nimekirja laadimiseks
  app.get('/api/matk', async (req, res) => {
-    const matkad = await loeMatkad()
+    matkad = await loeMatkad()
     res.json(matkad)
  } )
 
@@ -161,6 +141,29 @@ app.post('/registreerumine', (req, res) => {
 
  //ühe matka ühte osaleja laadimine
  app.get('/api/matk/:matkaIndeks/osaleja/:osalejaIndeks')
+ 
+ //ühe matka ühte osaleja kustutamine
+ app.delete('/api/matk/:matkaIndeks/osaleja/:osalejaEmail', async (req, res) => {
+    if (matkad.length < 1) {
+        matkad = await loeMatkad()
+    }
+
+    console.log('Kustutame matka', req.params.matkaIndeks, 'osaleja', req.params.osalejaEmail )
+    const matk = matkad[req.params.matkaIndeks]
+    if (!matk) {
+        console.log('matka ei leitud')
+        res.status(404).end()
+    }
+
+    console.log(matk.osalejad)
+    const muudetudOsalejad = matk.osalejad.filter(o => o.email !== req.params.osalejaEmail)
+
+    console.log(muudetudOsalejad)
+    matk.osalejad = muudetudOsalejad
+    muudaMatk(matk)
+
+    res.json(matk)
+ }) 
 
 
 
